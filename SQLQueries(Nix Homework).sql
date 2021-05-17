@@ -52,10 +52,10 @@ FROM dbo.Customers INNER JOIN dbo.Orders ON dbo.Customers.CustomerID = dbo.Order
 WHERE City <> ShipCity
 
 -- 9.	Товарами из какой категории в 1997-м году заинтересовалось больше всего компаний, имеющих факс?
---#ÑustomersWithFaxAndOrdersByYear
+--#CustomersWithFaxAndOrdersByYear
 SELECT 
 OrderID,dbo.Customers.CustomerID 
-INTO #ÑustomersWithFaxAndOrdersByYear
+INTO #CustomersWithFaxAndOrdersByYear
 FROM dbo.Orders INNER JOIN dbo.Customers ON Customers.CustomerID=Orders.CustomerID
 WHERE YEAR(OrderDate)=1997 AND Fax IS NOT NULL
 
@@ -83,15 +83,15 @@ FROM(
 	SELECT
 	#OrdersDetailProductsCategories.CategoryID,
 	COUNT(#OrdersDetailProductsCategories.CategoryID) 'count'
-	FROM #ÑustomersWithFaxAndOrdersByYear INNER JOIN #OrdersDetailProductsCategories ON #ÑustomersWithFaxAndOrdersByYear.OrderID = #OrdersDetailProductsCategories.OrderID
+	FROM #CustomersWithFaxAndOrdersByYear INNER JOIN #OrdersDetailProductsCategories ON #CustomersWithFaxAndOrdersByYear.OrderID = #OrdersDetailProductsCategories.OrderID
 
 GROUP BY CategoryID, CategoryName) res)
 
 --
 SELECT
 	CategoryName
-FROM #ÑustomersWithFaxAndOrdersByYear INNER JOIN #OrdersDetailProductsCategories 
-ON #ÑustomersWithFaxAndOrdersByYear.OrderID = #OrdersDetailProductsCategories.OrderID
+FROM #CustomersWithFaxAndOrdersByYear INNER JOIN #OrdersDetailProductsCategories 
+ON #CustomersWithFaxAndOrdersByYear.OrderID = #OrdersDetailProductsCategories.OrderID
 GROUP BY CategoryID, CategoryName
 HAVING COUNT(CategoryID) = @TheHiestNumOfOrdersQuantity
 
